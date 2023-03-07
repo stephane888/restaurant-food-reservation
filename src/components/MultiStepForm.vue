@@ -14,7 +14,7 @@
         ></time-display>
       </div>
       <div v-show="currentStep == 2" key="third" class="animate">
-        <nombre-place></nombre-place>
+        <nombre-place ref="placesdisplay"></nombre-place>
       </div>
       <div v-show="currentStep == 3" key="four" class="animate">
         <choose-offer></choose-offer>
@@ -55,8 +55,8 @@ export default {
       console.log("voici dates", date, "", this.$refs.timedisplay);
       this.$refs.timedisplay.loadAvailableHours(date);
     },
-    ev_hours_value() {
-      // this.$refs.time.loadAvailableHours(date);
+    ev_hours_value(date, hour) {
+      this.$refs.placesdisplay.loadAvailablePlaces(date, hour);
     },
     submitStep(ev) {
       ev.preventDefault();

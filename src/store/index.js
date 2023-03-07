@@ -21,6 +21,8 @@ export default new Vuex.Store({
         step_name: "Heure",
         step_icon: "clock",
         value: "",
+        period_name: "",
+        discount: "",
       },
       {
         step_no: 3,
@@ -41,10 +43,15 @@ export default new Vuex.Store({
     ],
     currentStep: 0,
     urlLoad: "/booking-system/dates",
+    finalUrl: "/booking-system/set-reservation",
     defaultConfig: null,
   },
   getters: {},
   mutations: {
+    SET_HOUR_SUPL_DATAS(state, period, discount) {
+      state.steps[1].period_name = period;
+      state.steps[1].discount = discount;
+    },
     SET_CURRENT_STEP(state, stepIndex) {
       state.currentStep = stepIndex;
     },
@@ -52,6 +59,10 @@ export default new Vuex.Store({
       state.steps[state.currentStep].value = value;
       state.steps[state.currentStep].step_valid = true;
       if (state.currentStep + 1 < state.steps.length) {
+        for (let i = state.currentStep + 1; i < state.steps.length; i++) {
+          state.steps[i].value = "";
+          state.steps[i].step_valid = false;
+        }
         state.currentStep++;
       }
     },
@@ -68,6 +79,9 @@ export default new Vuex.Store({
     },
     setDefaultConfig({ commit }, datas) {
       commit("SET_DEFAULT_CONFIG", datas);
+    },
+    setHourSuplDatas({ commit }, period, discount) {
+      commit("SET_HOUR_SUPL_DATAS", period, discount);
     },
   },
   modules: {},

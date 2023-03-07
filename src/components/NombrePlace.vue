@@ -17,7 +17,7 @@
               @click="setTime(place)"
             >
               <span class="time">{{ place }}</span>
-              <span class="tt-discount">-12%</span>
+              <!-- <span class="tt-discount">-12%</span> -->
             </button>
           </div>
         </div>
@@ -27,7 +27,8 @@
 </template>
 
 <script>
-//import moment from "../js/moment";
+import moment from "../js/moment";
+import rootConfig from "../rootConfig";
 import { mapState } from "vuex";
 export default {
   name: "BlocReservation",
@@ -35,28 +36,54 @@ export default {
   props: {},
   data() {
     return {
-      Places: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+      Places: [],
     };
   },
   mounted() {},
   computed: {
-    ...mapState(["defaultConfig"]),
+    ...mapState(["defaultConfig", "urlLoad"]),
     nombrePlaces() {
-      if (this.defaultConfig && this.defaultConfig.maxPeoples) {
-        let nbPlace = [];
-        let begin = 1;
-        while (nbPlace.length < this.defaultConfig.maxPeoples) {
-          nbPlace.push(begin);
-          console.log("ae");
-          begin++;
-        }
-        return nbPlace;
-      } else {
-        return this.Places;
-      }
+      return this.Places;
     },
+    // nombrePlaces() {
+    //   if (this.defaultConfig && this.defaultConfig.maxPeoples) {
+    //     let nbPlace = [];
+    //     let begin = 1;
+    //     while (nbPlace.length < this.defaultConfig.maxPeoples) {
+    //       nbPlace.push(begin);
+    //       console.log("ae");
+    //       begin++;
+    //     }
+    //     return nbPlace;
+    //   } else {
+    //     return this.Places;
+    //   }
+    // },
   },
   methods: {
+    setPlaces(nbrePlaces) {
+      this.Places = [];
+      for (let i = 1; i <= nbrePlaces; i++) {
+        this.Places.push(i);
+      }
+      console.log("Nbre places : " + this.Places);
+    },
+    loadAvailablePlaces(date, hour_string) {
+      let date_string = moment(date).unix();
+      rootConfig
+        .get(this.urlLoad + "/" + date_string + "/" + hour_string)
+        .then((reponse) => {
+          console.log("hours response", reponse);
+          if (reponse.data) {
+            this.setPlaces(reponse.data.number);
+            console.log(reponse.data.number);
+          }
+          this.hoursIsLoading = false;
+        })
+        .catch((er) => {
+          console.log("hours error", er);
+        });
+    },
     setTime(value) {
       this.$store.dispatch("setStepValue", value);
     },

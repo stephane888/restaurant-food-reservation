@@ -42,10 +42,14 @@
 </template>
 
 <script>
-//import moment from "../js/moment";
+import moment from "../js/moment";
+import { mapState } from "vuex";
+import rootConfig from "../rootConfig";
 export default {
   name: "ChooseOffer",
-  components: {},
+  components: {
+    ...mapState(["finalUrl", "steps"]),
+  },
   props: {},
   data() {
     return {
@@ -89,6 +93,21 @@ export default {
       console.log("ae", offer.value);
       this.$store.dispatch("setStepValue", this.value);
     },
+
+    setReservation() {
+      let day = moment(this.steps[0].value).unix();
+      let hour = this.steps[1].value;
+      let period = this.steps[1].periode_name;
+      let reduction = this.steps[1].discount;
+      let seats = this.steps[2].value;
+      rootConfig.post(this.finalUrl, {
+        reservation_date: day,
+        number_of_places: seats,
+        time_of_reservation: hour,
+        periode_name: period,
+        reservation_reduction: reduction,
+      });
+    },
   },
 };
 </script>
@@ -99,6 +118,7 @@ $gray-color: #f8f9fa;
 
 .offers-content {
   text-align: left;
+
   .option-selection {
     padding: 10px;
     margin: 1rem 0px;
@@ -120,6 +140,7 @@ $gray-color: #f8f9fa;
       font-weight: bold;
       margin-bottom: 10px;
       padding-right: 30px;
+
       .reduction {
         padding: 3px;
         background: black;
@@ -127,13 +148,16 @@ $gray-color: #f8f9fa;
         margin-right: 6px;
       }
     }
+
     .cc-description {
       color: rgba(#000000, 0.6);
     }
+
     .check-circle {
       position: absolute;
       right: 15px;
       top: 0;
+
       .cc-rond {
         border-radius: 50px;
         border: 1px solid $gray-color;
@@ -148,11 +172,14 @@ $gray-color: #f8f9fa;
         justify-content: center;
       }
     }
+
     .first-line {
       position: relative;
     }
+
     &:hover {
       box-shadow: 0px 3px 10px rgba(#000, 0.2);
+
       .check-circle {
         .cc-rond {
           background-color: rgba(#000000, 0.2);
@@ -160,14 +187,17 @@ $gray-color: #f8f9fa;
       }
     }
   }
+
   .os-selected {
     border: 2px solid $first-color;
+
     .check-circle {
       .cc-rond {
         background-color: $first-color;
         border-color: $first-color;
       }
     }
+
     &:hover {
       .check-circle {
         .cc-rond {
@@ -178,9 +208,11 @@ $gray-color: #f8f9fa;
     }
   }
 }
+
 .book-bloc {
   width: 100%;
   margin-top: 5rem;
+
   .book-btn {
     display: block;
     width: 100%;
@@ -191,6 +223,7 @@ $gray-color: #f8f9fa;
     border: none;
     border-radius: 5px;
     transition: ease 0.4s;
+
     &:hover {
       background: $first-color;
     }
