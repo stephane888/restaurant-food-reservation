@@ -22,8 +22,9 @@
               <span
                 class="label-step ml-2"
                 v-show="step.step_valid || currentStep == index"
-                >{{ step.step_name }}</span
               >
+                {{ step.step_name }}
+              </span>
             </div>
 
             <div v-show="showLabel(step)">
@@ -32,10 +33,10 @@
               }}</span>
               <span v-else class="label-step"
                 >{{ step.value }}
-                <span v-if="step.step_icon == 'person'"
-                  >Personne<span v-show="step.value > 1">s</span></span
-                ></span
-              >
+                <span v-if="step.step_icon == 'person'">
+                  Personne <span v-show="step.value > 1">s</span>
+                </span>
+              </span>
             </div>
           </button>
           <span class="chevron">
