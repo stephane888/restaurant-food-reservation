@@ -15,10 +15,13 @@
               class="time-btn"
               v-for="(heure, i) in time.times"
               :key="i"
-              @click="setTime(heure)"
+              :disabled="!heure.status"
+              @click="setTime(heure.hour)"
             >
-              <span class="time">{{ heure }}</span>
-              <span class="tt-discount">-12%</span>
+              <span class="time">{{ heure.hour }}</span>
+              <span class="tt-discount" v-show="time.discount">
+                {{ time.discount }}
+              </span>
             </button>
           </div>
         </div>
@@ -104,6 +107,7 @@ export default {
     return {
       hoursIsLoading: false,
       allTime: [],
+      date: "",
     };
   },
   mounted() {},
@@ -112,6 +116,7 @@ export default {
   },
   methods: {
     loadAvailableHours(date) {
+      this.date = date;
       this.hoursIsLoading = true;
       let date_string = moment(date).unix();
       console.log("date", date_string);
@@ -131,6 +136,7 @@ export default {
       this.allTime = data;
     },
     setTime(value) {
+      this.$emit("ev_hours", this.date, value);
       this.$store.dispatch("setStepValue", value);
     },
   },
