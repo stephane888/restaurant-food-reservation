@@ -16,7 +16,7 @@
               v-for="(heure, i) in time.times"
               :key="i"
               :disabled="!heure.status"
-              @click="setTime(heure.hour)"
+              @click="setTime(heure.hour, time.discount, time.name)"
             >
               <span class="time">{{ heure.hour }}</span>
               <span class="tt-discount" v-show="time.discount">
@@ -135,9 +135,15 @@ export default {
     setAllTime(data) {
       this.allTime = data;
     },
-    setTime(value) {
+    setTime(value, discount, period_name) {
       this.$emit("ev_hours", this.date, value);
       this.$store.dispatch("setStepValue", value);
+      console.log("hello world-" + discount + "-there");
+      const payload = {
+        period_name: period_name,
+        discount: discount,
+      };
+      this.$store.dispatch("setHourSuplDatas", payload);
     },
   },
 };
