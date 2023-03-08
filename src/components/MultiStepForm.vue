@@ -19,6 +19,9 @@
       <div v-show="currentStep == 3" key="four" class="animate">
         <choose-offer @setReservation="setReservation"></choose-offer>
       </div>
+      <div v-show="currentStep == 4" key="five" class="animate">
+        <show-report></show-report>
+      </div>
       <!-- </transition-group> -->
     </form>
     <!-- step reservation -->
@@ -39,6 +42,7 @@ import VueCalendar from "./VueCalendar.vue";
 import TimeDisplay from "./TimeDisplay.vue";
 import NombrePlace from "./NombrePlace.vue";
 import ChooseOffer from "./ChooseOffer";
+import ShowReport from "./ShowReport";
 import { mapState } from "vuex";
 import users from "../users";
 export default {
@@ -48,6 +52,7 @@ export default {
     TimeDisplay,
     NombrePlace,
     ChooseOffer,
+    ShowReport,
     loginRegister: () =>
       import("drupal-vuejs/src/App/components/LoginRegister.vue"),
   },

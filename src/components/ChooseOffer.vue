@@ -16,7 +16,7 @@
           :class="{
             'os-selected': isActive(offre),
           }"
-          @click="selectOffer(offre)"
+          @click="setValue(offre)"
         >
           <div class="first-line">
             <div class="cc-titre">
@@ -80,10 +80,7 @@ export default {
       if (this.value == offer.value) return true;
       else return false;
     },
-    setOffer(value) {
-      this.$store.dispatch("setStepValue", value);
-    },
-    selectOffer(offer) {
+    setValue(offer) {
       this.value = offer.value;
       console.log("ae", offer.value);
       this.$store.dispatch("setStepValue", this.value);

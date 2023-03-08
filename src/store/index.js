@@ -50,11 +50,20 @@ export default new Vuex.Store({
         step_name: "Choisir une offre",
         value: "",
       },
+      {
+        step_no: 5,
+        step_valid: false,
+        step_skip: false,
+        step_icon: "journals",
+        step_name: "",
+        value: "",
+      },
     ],
     currentStep: 0,
     urlLoad: "/booking-system/dates",
     finalUrl: "/booking-system/set-reservation",
     defaultConfig: null,
+    report: 0,
   },
   getters: {},
   mutations: {
@@ -85,6 +94,9 @@ export default new Vuex.Store({
     SET_SHOW_LOGIN_FORM(state, value) {
       state.show_login_form = value;
     },
+    SET_REPORT_VALUE(state, value) {
+      state.report = value;
+    },
   },
   actions: {
     setCurrentStep({ commit }, stepIndex) {
@@ -98,6 +110,9 @@ export default new Vuex.Store({
     },
     setHourSuplDatas({ commit }, payload) {
       commit("SET_HOUR_SUPL_DATAS", payload);
+    },
+    setReportValue({ commit }, report) {
+      commit("SET_REPORT_VALUE", report);
     },
     /**
      * Effectue la sauveharde de la reservation.
@@ -122,8 +137,9 @@ export default new Vuex.Store({
       rootConfig
         .post(state.finalUrl, reservation)
         .then((response) => {
-          console.log("reservation response", response);
-          dispatch("setStepValue", response);
+          console.log("reservation response", response.data);
+          if (response.data) dispatch("setReportValue", response.data);
+          dispatch("setStepValue", "");
         })
         .catch((er) => {
           console.log("hours error", er);

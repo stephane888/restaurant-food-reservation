@@ -34,7 +34,7 @@
               <span v-else class="label-step"
                 >{{ step.value }}
                 <span v-if="step.step_icon == 'person'">
-                  Personne <span v-show="step.value > 1">s</span>
+                  Personne<span v-show="step.value > 1">s</span>
                 </span>
               </span>
             </div>
