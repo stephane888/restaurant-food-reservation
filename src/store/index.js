@@ -1,5 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import moment from "../js/moment";
+import rootConfig from "../rootConfig";
 
 Vue.use(Vuex);
 
@@ -12,6 +14,7 @@ export default new Vuex.Store({
     },
     // Donnée de l'utilisateur connecté.
     user: null,
+    show_login_form: false,
     steps: [
       {
         step_no: 1,
@@ -79,6 +82,9 @@ export default new Vuex.Store({
     SET_USER(state, value) {
       state.user = value;
     },
+    SET_SHOW_LOGIN_FORM(state, value) {
+      state.show_login_form = value;
+    },
   },
   actions: {
     setCurrentStep({ commit }, stepIndex) {
@@ -92,6 +98,36 @@ export default new Vuex.Store({
     },
     setHourSuplDatas({ commit }, payload) {
       commit("SET_HOUR_SUPL_DATAS", payload);
+    },
+    /**
+     * Effectue la sauveharde de la reservation.
+     *
+     * @param {*} param
+     */
+    setReservation({ state, dispatch }) {
+      // console.log(this.steps);
+      let day = moment(state.steps[0].value).unix();
+      let hour = state.steps[1].value;
+      let period = state.steps[1].period_name;
+      let reduction = state.steps[1].discount;
+      let seats = state.steps[2].value;
+      const reservation = {
+        reservation_date: day,
+        number_of_places: seats,
+        time_of_reservation: hour,
+        periode_name: period,
+        reservation_reduction: reduction,
+      };
+      console.log(reservation);
+      rootConfig
+        .post(state.finalUrl, reservation)
+        .then((response) => {
+          console.log("reservation response", response);
+          dispatch("setStepValue", response);
+        })
+        .catch((er) => {
+          console.log("hours error", er);
+        });
     },
   },
   modules: {},

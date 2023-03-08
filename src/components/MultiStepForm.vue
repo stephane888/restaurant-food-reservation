@@ -1,6 +1,6 @@
 <template>
   <div class="multi-step-form">
-    <form class="form" @submit="submitStep">
+    <form v-if="!show_login_form" class="form" @submit="submitStep">
       <slot name="header"></slot>
 
       <!-- <transition-group name="slide-fade" mode="eout-in"> -->
@@ -17,17 +17,18 @@
         <nombre-place ref="placesdisplay"></nombre-place>
       </div>
       <div v-show="currentStep == 3" key="four" class="animate">
-        <choose-offer></choose-offer>
+        <choose-offer @setReservation="setReservation"></choose-offer>
       </div>
-      <!-- step reservation -->
-      <loginRegister
-        actionAfterRegister="emit_even_register"
-        action-after-login="emit_even"
-        :showModalSuccess="false"
-        ref="LoginRegister"
-      ></loginRegister>
       <!-- </transition-group> -->
     </form>
+    <!-- step reservation -->
+    <loginRegister
+      v-if="show_login_form"
+      actionAfterRegister="emit_even_register"
+      action-after-login="emit_even"
+      :showModalSuccess="false"
+      ref="LoginRegister"
+    ></loginRegister>
     <!-- steps :
     <pre>{{ steps }}</pre> -->
   </div>
@@ -57,7 +58,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["currentStep", "steps"]),
+    ...mapState(["currentStep", "steps", "user", "show_login_form"]),
     canPrev() {
       return this.activeStepIndex > 0;
     },
@@ -93,30 +94,58 @@ export default {
       //   this.activeStepIndex++;
       // }
     },
+    setReservation() {
+      if (this.user) {
+        this.$store.dispatch("setReservation");
+      } else {
+        this.$store.commit("SET_SHOW_LOGIN_FORM", true);
+      }
+    },
+    /**
+     * Permet de verifier si un utilisateur s'est connecté.
+     */
     check_if_user_connected() {
       document.addEventListener(
         "login_rx_vuejs__user_is_login",
         () => {
-          this.getCurrentUser();
-          // Si l'utilisateur s'est connecté, il a forcement cliquer sur vote
-          this.setVote();
+          this.getCurrentUser().then((user) => {
+            console.log("user : ", user);
+            // Ajouter votre logique ici.
+            this.$store.dispatch("setReservation");
+          });
         },
         false
       );
     },
+    /**
+     * Permet de verifier si un utilisateur s'est enregistrer
+     */
     check_if_user_register() {
       document.addEventListener(
         "login_rx_vuejs__user_is_register",
         () => {
-          console.log("this.$refs : ", this.$refs);
-          this.$refs.LoginRegister.connexionUser(this.form_connect);
+          // declanchera l'enenement login_rx_vuejs__user_is_login
+          this.$refs.LoginRegister.connexionUser(this.$store.state.form);
         },
         false
       );
     },
+    /**
+     * Recupere les informations de l'utilisateur s'il est connecté.
+     */
     getCurrentUser() {
-      users.getCurrentUser().then((user) => {
-        if (user) this.$store.commit("SET_USER", user);
+      return new Promise((resolv, reject) => {
+        users
+          .getCurrentUser()
+          .then((user) => {
+            if (user) {
+              this.$store.commit("SET_USER", user);
+              resolv(user);
+            }
+          })
+          .catch((er) => {
+            reject(er);
+          });
       });
     },
   },
@@ -146,6 +175,9 @@ a {
 .multi-step-form {
   overflow: hidden;
   // max-height: 500px;
+  .login-page {
+    min-height: 400px;
+  }
 }
 .msf-action {
   display: flex;

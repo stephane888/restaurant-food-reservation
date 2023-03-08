@@ -44,14 +44,8 @@
 </template>
 
 <script>
-import moment from "../js/moment";
-import { mapState } from "vuex";
-import rootConfig from "../rootConfig";
 export default {
   name: "ChooseOffer",
-  computed: {
-    ...mapState(["finalUrl", "steps"]),
-  },
   props: {},
   data() {
     return {
@@ -81,7 +75,6 @@ export default {
       ],
     };
   },
-  mounted() {},
   methods: {
     isActive(offer) {
       if (this.value == offer.value) return true;
@@ -95,31 +88,8 @@ export default {
       console.log("ae", offer.value);
       this.$store.dispatch("setStepValue", this.value);
     },
-
     setReservation() {
-      // console.log(this.steps);
-      let day = moment(this.steps[0].value).unix();
-      let hour = this.steps[1].value;
-      let period = this.steps[1].period_name;
-      let reduction = this.steps[1].discount;
-      let seats = this.steps[2].value;
-      const reservation = {
-        reservation_date: day,
-        number_of_places: seats,
-        time_of_reservation: hour,
-        periode_name: period,
-        reservation_reduction: reduction,
-      };
-      console.log(reservation);
-      rootConfig
-        .post(this.finalUrl, reservation)
-        .then((response) => {
-          console.log("reservation response", response);
-          this.$store.dispatch("setStepValue", response);
-        })
-        .catch((er) => {
-          console.log("hours error", er);
-        });
+      this.$emit("setReservation");
     },
   },
 };

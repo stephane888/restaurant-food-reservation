@@ -76,6 +76,7 @@ export default {
     },
     setCurrentStep(i) {
       this.stepDisabled(i) ? "" : this.$store.dispatch("setCurrentStep", i);
+      this.$store.commit("SET_SHOW_LOGIN_FORM", false);
     },
     formatDate(value) {
       const date = moment(value).format("DD MMM  YYYY");
