@@ -5,6 +5,13 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    //to login
+    form: {
+      name: [{ value: "" }],
+      mail: [{ value: "" }],
+    },
+    // Donnée de l'utilisateur connecté.
+    user: null,
     steps: [
       {
         step_no: 1,
@@ -68,6 +75,9 @@ export default new Vuex.Store({
     },
     SET_DEFAULT_CONFIG(state, value) {
       state.defaultConfig = value;
+    },
+    SET_USER(state, value) {
+      state.user = value;
     },
   },
   actions: {

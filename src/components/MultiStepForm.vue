@@ -19,6 +19,13 @@
       <div v-show="currentStep == 3" key="four" class="animate">
         <choose-offer></choose-offer>
       </div>
+      <!-- step reservation -->
+      <loginRegister
+        actionAfterRegister="emit_even_register"
+        action-after-login="emit_even"
+        :showModalSuccess="false"
+        ref="LoginRegister"
+      ></loginRegister>
       <!-- </transition-group> -->
     </form>
     <!-- steps :
@@ -32,9 +39,17 @@ import TimeDisplay from "./TimeDisplay.vue";
 import NombrePlace from "./NombrePlace.vue";
 import ChooseOffer from "./ChooseOffer";
 import { mapState } from "vuex";
+import users from "../users";
 export default {
   name: "MultiStepForm",
-  components: { VueCalendar, TimeDisplay, NombrePlace, ChooseOffer },
+  components: {
+    VueCalendar,
+    TimeDisplay,
+    NombrePlace,
+    ChooseOffer,
+    loginRegister: () =>
+      import("drupal-vuejs/src/App/components/LoginRegister.vue"),
+  },
   props: {},
   data() {
     return {
@@ -49,6 +64,11 @@ export default {
     canNext() {
       return this.steps.length && this.steps[this.activeStepIndex].step_valid;
     },
+  },
+  mounted() {
+    this.check_if_user_connected();
+    this.check_if_user_register();
+    this.getCurrentUser();
   },
   methods: {
     ev_date_value(date) {
@@ -72,6 +92,32 @@ export default {
       // while (this.steps[this.activeStepIndex].step_skip === true) {
       //   this.activeStepIndex++;
       // }
+    },
+    check_if_user_connected() {
+      document.addEventListener(
+        "login_rx_vuejs__user_is_login",
+        () => {
+          this.getCurrentUser();
+          // Si l'utilisateur s'est connecté, il a forcement cliquer sur vote
+          this.setVote();
+        },
+        false
+      );
+    },
+    check_if_user_register() {
+      document.addEventListener(
+        "login_rx_vuejs__user_is_register",
+        () => {
+          console.log("this.$refs : ", this.$refs);
+          this.$refs.LoginRegister.connexionUser(this.form_connect);
+        },
+        false
+      );
+    },
+    getCurrentUser() {
+      users.getCurrentUser().then((user) => {
+        if (user) this.$store.commit("SET_USER", user);
+      });
     },
   },
 };
