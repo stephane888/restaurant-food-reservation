@@ -55,9 +55,9 @@ export default new Vuex.Store({
   },
   getters: {},
   mutations: {
-    SET_HOUR_SUPL_DATAS(state, period, discount) {
-      state.steps[1].period_name = period;
-      state.steps[1].discount = discount;
+    SET_HOUR_SUPL_DATAS(state, payload) {
+      state.steps[1].period_name = payload.period_name;
+      state.steps[1].discount = payload.discount;
     },
     SET_CURRENT_STEP(state, stepIndex) {
       state.currentStep = stepIndex;
@@ -90,8 +90,8 @@ export default new Vuex.Store({
     setDefaultConfig({ commit }, datas) {
       commit("SET_DEFAULT_CONFIG", datas);
     },
-    setHourSuplDatas({ commit }, period, discount) {
-      commit("SET_HOUR_SUPL_DATAS", period, discount);
+    setHourSuplDatas({ commit }, payload) {
+      commit("SET_HOUR_SUPL_DATAS", payload);
     },
   },
   modules: {},

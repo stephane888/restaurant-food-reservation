@@ -13,7 +13,9 @@
           class="option-selection"
           v-for="(offre, index) in offers"
           :key="index"
-          :class="{ 'os-selected': isActive(offre) }"
+          :class="{
+            'os-selected': isActive(offre),
+          }"
           @click="selectOffer(offre)"
         >
           <div class="first-line">
@@ -35,7 +37,7 @@
         </button>
       </div>
       <div class="book-bloc">
-        <button class="book-btn">Book now</button>
+        <button class="book-btn" @click="setReservation()">Book now</button>
       </div>
     </div>
   </div>
@@ -47,7 +49,7 @@ import { mapState } from "vuex";
 import rootConfig from "../rootConfig";
 export default {
   name: "ChooseOffer",
-  components: {
+  computed: {
     ...mapState(["finalUrl", "steps"]),
   },
   props: {},
@@ -95,18 +97,29 @@ export default {
     },
 
     setReservation() {
+      // console.log(this.steps);
       let day = moment(this.steps[0].value).unix();
       let hour = this.steps[1].value;
-      let period = this.steps[1].periode_name;
+      let period = this.steps[1].period_name;
       let reduction = this.steps[1].discount;
       let seats = this.steps[2].value;
-      rootConfig.post(this.finalUrl, {
+      const reservation = {
         reservation_date: day,
         number_of_places: seats,
         time_of_reservation: hour,
         periode_name: period,
         reservation_reduction: reduction,
-      });
+      };
+      console.log(reservation);
+      rootConfig
+        .post(this.finalUrl, reservation)
+        .then((response) => {
+          console.log("reservation response", response);
+          this.$store.dispatch("setStepValue", response);
+        })
+        .catch((er) => {
+          console.log("hours error", er);
+        });
     },
   },
 };

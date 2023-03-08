@@ -14,7 +14,7 @@
               class="time-btn"
               v-for="(place, i) in nombrePlaces"
               :key="i"
-              @click="setTime(place)"
+              @click="setPlace(place)"
             >
               <span class="time">{{ place }}</span>
               <!-- <span class="tt-discount">-12%</span> -->
@@ -84,7 +84,7 @@ export default {
           console.log("hours error", er);
         });
     },
-    setTime(value) {
+    setPlace(value) {
       this.$store.dispatch("setStepValue", value);
     },
   },
