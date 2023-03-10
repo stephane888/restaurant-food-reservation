@@ -1,38 +1,52 @@
 <template>
   <div class="report">
-    <div v-show="getReportStatut == 1" class="report-box-success report-box">
+    <div
+      class="report-box"
+      :class="{
+        'report-box-success': getReportStatut == 1,
+        'report-box-error': getReportStatut != 1,
+      }"
+    >
       <div class="dot"></div>
       <div class="dot two"></div>
-      <div class="face face-happy">
+      <div
+        class="face"
+        :class="{
+          'face-happy': getReportStatut == 1,
+          'face-sad': getReportStatut != 1,
+        }"
+      >
         <div class="eye"></div>
         <div class="eye right"></div>
-        <div class="mouth happy"></div>
+        <div
+          class="mouth"
+          :class="{
+            happy: getReportStatut == 1,
+            sad: getReportStatut != 1,
+          }"
+        ></div>
       </div>
-      <div class="shadow scale"></div>
-      <div class="message">
+      <div
+        class="shadow"
+        :class="{
+          scale: getReportStatut == 1,
+          move: getReportStatut != 1,
+        }"
+      ></div>
+      <div v-if="getReportStatut == 1" class="message">
         <div class="report-title alert">Success!</div>
         <div class="report-description">yay, everything is working.</div>
       </div>
-      <button class="button-box">
-        <div class="report-title green">continue</div>
-      </button>
-    </div>
-
-    <div v-show="getReportStatut != 1" class="report-box-error report-box">
-      <div class="dot"></div>
-      <div class="dot two"></div>
-      <div class="face face-sad">
-        <div class="eye"></div>
-        <div class="eye right"></div>
-        <div class="mouth sad"></div>
-      </div>
-      <div class="shadow move"></div>
-      <div class="message">
+      <div v-else class="message">
         <div class="report-title alert">Error!</div>
         <div class="report-description">oh no, something went wrong.</div>
       </div>
-      <button class="button-box">
-        <div class="report-title red">try again</div>
+
+      <button @click="resetApp()" class="button-box">
+        <div v-if="getReportStatut == 1" class="report-title green">
+          continue
+        </div>
+        <div v-else class="report-title red">try again</div>
       </button>
     </div>
   </div>
@@ -51,10 +65,16 @@ export default {
   computed: {
     ...mapState(["report"]),
     getReportStatut() {
+      console.log("this report:" + this.report);
+      console.log("condition :" + (this.report == 1));
       return this.report;
     },
   },
-  methods: {},
+  methods: {
+    resetApp() {
+      this.$emit("resetApp");
+    },
+  },
 };
 </script>
 
@@ -75,7 +95,7 @@ $font: "Lato", sans-serif;
   position: relative;
   margin: auto;
   overflow: hidden;
-  width: 700px;
+  width: 100%;
   height: 250px;
 
   .report-titles {

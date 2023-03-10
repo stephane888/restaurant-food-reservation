@@ -20,7 +20,7 @@ export default new Vuex.Store({
         step_no: 1,
         step_valid: false,
         step_skip: false,
-        step_name: "Date",
+        step_name: "Date de reservation",
         step_icon: "calendar2-date",
         value: "",
       },
@@ -28,7 +28,7 @@ export default new Vuex.Store({
         step_no: 2,
         step_valid: false,
         step_skip: true,
-        step_name: "Heure",
+        step_name: "Heure de reservation",
         step_icon: "clock",
         value: "",
         period_name: "",
@@ -39,7 +39,7 @@ export default new Vuex.Store({
         step_valid: false,
         step_skip: false,
         step_icon: "person",
-        step_name: "Offres",
+        step_name: "Nombre de places",
         value: "",
       },
       {
@@ -47,7 +47,7 @@ export default new Vuex.Store({
         step_valid: false,
         step_skip: false,
         step_icon: "bullseye",
-        step_name: "Choisir une offre",
+        step_name: "Bilan de la reservation",
         value: "",
       },
       {
@@ -55,7 +55,7 @@ export default new Vuex.Store({
         step_valid: false,
         step_skip: false,
         step_icon: "journals",
-        step_name: "",
+        step_name: "rapport d'enregistrement de la reservation",
         value: "",
       },
     ],
@@ -97,6 +97,12 @@ export default new Vuex.Store({
     SET_REPORT_VALUE(state, value) {
       state.report = value;
     },
+    DISABLE_BANNER(state) {
+      for (let i = 0; i < state.state.steps.length; i++) {
+        state.steps[i].value = "";
+        state.steps[i].step_valid = false;
+      }
+    },
   },
   actions: {
     setCurrentStep({ commit }, stepIndex) {
@@ -114,12 +120,17 @@ export default new Vuex.Store({
     setReportValue({ commit }, report) {
       commit("SET_REPORT_VALUE", report);
     },
+    resetApp({ commit }) {
+      commit("SET_CURRENT_STEP", 0);
+      commit("SET_STEP_VALUE", "");
+      commit("SET_CURRENT_STEP", 0);
+    },
     /**
      * Effectue la sauveharde de la reservation.
      *
      * @param {*} param
      */
-    setReservation({ state, dispatch }) {
+    setReservation({ state, commit }) {
       // console.log(this.steps);
       let day = moment(state.steps[0].value).unix();
       let hour = state.steps[1].value;
@@ -138,11 +149,13 @@ export default new Vuex.Store({
         .post(state.finalUrl, reservation)
         .then((response) => {
           console.log("reservation response", response.data);
-          if (response.data) dispatch("setReportValue", response.data);
-          dispatch("setStepValue", "");
+          if (response.data) commit("SET_REPORT_VALUE", response.data);
+          commit("SET_STEP_VALUE", "success");
         })
         .catch((er) => {
           console.log("hours error", er);
+          commit("SET_REPORT_VALUE", 0);
+          commit("SET_STEP_VALUE", "error");
         });
     },
   },

@@ -1,7 +1,7 @@
 <template>
   <div class="multi-step-tabs mb-4">
     <div class="step-tabs-container">
-      <div class="step-banner">
+      <div class="step-banner" v-show="currentStep < 4">
         <div
           class="sb-button"
           v-for="(step, index) in steps"

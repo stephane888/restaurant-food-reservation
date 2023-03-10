@@ -1,11 +1,14 @@
 <template>
-  <div class="multi-step-form">
+  <div v-if="currentStep < 4" class="multi-step-form">
     <form v-if="!show_login_form" class="form" @submit="submitStep">
       <slot name="header"></slot>
 
       <!-- <transition-group name="slide-fade" mode="eout-in"> -->
       <div v-show="currentStep == 0" key="first" class="animate">
-        <vue-calendar @ev_data="ev_date_value"></vue-calendar>
+        <vue-calendar
+          ref="calendardisplay"
+          @ev_data="ev_date_value"
+        ></vue-calendar>
       </div>
       <div v-show="currentStep == 1" key="second" class="animate">
         <time-display
@@ -17,10 +20,7 @@
         <nombre-place ref="placesdisplay"></nombre-place>
       </div>
       <div v-show="currentStep == 3" key="four" class="animate">
-        <choose-offer @setReservation="setReservation"></choose-offer>
-      </div>
-      <div v-show="currentStep == 4" key="five" class="animate">
-        <show-report></show-report>
+        <display-info @setReservation="setReservation"></display-info>
       </div>
       <!-- </transition-group> -->
     </form>
@@ -33,7 +33,10 @@
       ref="LoginRegister"
     ></loginRegister>
     <!-- steps :
-    <pre>{{ steps }}</pre> -->
+      <pre>{{ steps }}</pre> -->
+  </div>
+  <div v-else key="five" class="animate">
+    <show-report @resetApp="resetApp"></show-report>
   </div>
 </template>
 
@@ -41,7 +44,7 @@
 import VueCalendar from "./VueCalendar.vue";
 import TimeDisplay from "./TimeDisplay.vue";
 import NombrePlace from "./NombrePlace.vue";
-import ChooseOffer from "./ChooseOffer";
+import DisplayInfo from "./DisplayInfo";
 import ShowReport from "./ShowReport";
 import { mapState } from "vuex";
 import users from "../users";
@@ -51,7 +54,7 @@ export default {
     VueCalendar,
     TimeDisplay,
     NombrePlace,
-    ChooseOffer,
+    DisplayInfo,
     ShowReport,
     loginRegister: () =>
       import("drupal-vuejs/src/App/components/LoginRegister.vue"),
@@ -69,6 +72,10 @@ export default {
     },
     canNext() {
       return this.steps.length && this.steps[this.activeStepIndex].step_valid;
+    },
+    showStepsPanel() {
+      console.log(!this.show_login_form && this.currentStep <= 3);
+      return !this.show_login_form && this.currentStep <= 3;
     },
   },
   mounted() {
@@ -152,6 +159,14 @@ export default {
             reject(er);
           });
       });
+    },
+    /**
+     * Permet de reinitialiser l'application
+     */
+    resetApp() {
+      this.$store.dispatch("resetApp");
+      this.$refs.getMinDate();
+      this.$refs.loadCalendarConfig();
     },
   },
 };

@@ -11,6 +11,7 @@ import {
   BIconBullseye,
   BIconCheck,
   BIconJournal,
+  BIconXCircle,
 } from "bootstrap-vue";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
@@ -20,6 +21,7 @@ Vue.component("BIcon", BIcon);
 Vue.component("BIconClock", BIconClock);
 Vue.component("BIconPerson", BIconPerson);
 Vue.component("BIconCheck", BIconCheck);
+Vue.component("BIconXCircle", BIconXCircle);
 Vue.component("BIconFilterSquare", BIconFilterSquare);
 Vue.component("BIconChevronRight", BIconChevronRight);
 Vue.component("BIconBullseye", BIconBullseye);

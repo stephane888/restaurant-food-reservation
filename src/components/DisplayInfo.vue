@@ -9,21 +9,14 @@
       </h6>
 
       <div class="offers-content">
-        <button
-          class="option-selection"
-          v-for="(offre, index) in offers"
+        <div
+          class="option-selection os-selected"
+          v-for="index in 3"
           :key="index"
-          :class="{
-            'os-selected': isActive(offre),
-          }"
-          @click="setValue(offre)"
         >
           <div class="first-line">
             <div class="cc-titre">
-              <span class="reduction" v-if="offre && offre.reduction.length">{{
-                offre.reduction
-              }}</span>
-              <span>{{ offre.titre }}</span>
+              <span>{{ steps[index - 1].step_name }}</span>
             </div>
             <div class="check-circle">
               <span class="cc-rond">
@@ -32,9 +25,27 @@
             </div>
           </div>
           <div class="cc-description">
-            {{ offre.description }}
+            {{ steps[index - 1].value }}
           </div>
-        </button>
+        </div>
+        <div class="option-selection os-selected">
+          <div class="first-line">
+            <div class="cc-titre">
+              <span>Utilisateur connecté(e)</span>
+            </div>
+            <div
+              :class="{
+                'x-circle': !isConnected,
+                'check-circle': isConnected,
+              }"
+            >
+              <span class="cc-rond">
+                <b-icon v-if="isConnected" icon="check" font-scale="1"></b-icon>
+                <b-icon v-else icon="x-circle" scale="1"></b-icon>
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="book-bloc">
         <button class="book-btn" @click="setReservation()">Book now</button>
@@ -44,6 +55,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "ChooseOffer",
   props: {},
@@ -52,9 +64,8 @@ export default {
       value: null,
       offers: [
         {
-          titre: "30% du repas",
-          reduction: "-30%",
-          value: "offer-1",
+          titre: "Date de reservation",
+          value: "",
           description:
             "Boissons non comprises, disponible sur la plage horaire réservée.",
         },
@@ -75,16 +86,27 @@ export default {
       ],
     };
   },
+  computed: {
+    ...mapState(["steps", "show_login_form", "user"]),
+    isConnected() {
+      console.log("this user:" + this.user);
+      if (this.user) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
   methods: {
-    isActive(offer) {
-      if (this.value == offer.value) return true;
-      else return false;
+    isActive() {
+      console.log("croix ou check" + this.show_login_form);
+      true;
     },
-    setValue(offer) {
-      this.value = offer.value;
-      console.log("ae", offer.value);
-      this.$store.dispatch("setStepValue", this.value);
-    },
+    // setValue(offer) {
+    //   this.value = offer.value;
+    //   console.log("ae", offer.value);
+    //   // this.$store.dispatch("setStepValue", this.value);
+    // },
     setReservation() {
       this.$emit("setReservation");
     },
@@ -94,6 +116,7 @@ export default {
 
 <style lang="scss">
 $first-color: rgb(88 148 66);
+$second-color: rgb(200, 66, 88);
 $gray-color: #f8f9fa;
 
 .offers-content {
@@ -101,11 +124,11 @@ $gray-color: #f8f9fa;
 
   .option-selection {
     padding: 10px;
-    margin: 1rem 0px;
+    margin: 1rem auto;
     margin-bottom: 25px;
     background-color: rgb(255, 255, 255);
     display: block;
-    width: 100%;
+    width: 75%;
     min-width: 14rem;
     text-align: left;
     line-height: 1.5;
@@ -113,7 +136,7 @@ $gray-color: #f8f9fa;
     border-radius: 2px;
     border-radius: 0.25rem;
     box-shadow: 0px 3px 6px rgba(#000, 0.2);
-    transition: border 500ms ease 0s, box-shadow ease 0.3s;
+    transition: width 250ms linear 0s, box-shadow ease 0.3s;
 
     .cc-titre {
       font-size: 14px;
@@ -133,7 +156,8 @@ $gray-color: #f8f9fa;
       color: rgba(#000000, 0.6);
     }
 
-    .check-circle {
+    .check-circle,
+    .x-circle {
       position: absolute;
       right: 15px;
       top: 0;
@@ -141,15 +165,26 @@ $gray-color: #f8f9fa;
       .cc-rond {
         border-radius: 50px;
         border: 1px solid $gray-color;
-        color: white;
         transition: ease 0.3s;
-        background: transparent;
         font-size: 24px;
         width: 25px;
         display: inline-flex;
         height: 25px;
         align-items: center;
         justify-content: center;
+      }
+    }
+    .x-circle {
+      .cc-rond {
+        border-color: $second-color;
+        background: $second-color;
+        color: white;
+      }
+    }
+    .check-circle {
+      .cc-rond {
+        background: transparent;
+        color: white;
       }
     }
 
@@ -159,6 +194,7 @@ $gray-color: #f8f9fa;
 
     &:hover {
       box-shadow: 0px 3px 10px rgba(#000, 0.2);
+      width: 76%;
 
       .check-circle {
         .cc-rond {
@@ -169,8 +205,12 @@ $gray-color: #f8f9fa;
   }
 
   .os-selected {
-    border: 2px solid $first-color;
-
+    .x-circle {
+      .cc-round {
+        background-color: $second-color;
+        border-color: $second-color;
+      }
+    }
     .check-circle {
       .cc-rond {
         background-color: $first-color;
@@ -183,6 +223,12 @@ $gray-color: #f8f9fa;
         .cc-rond {
           background-color: $first-color;
           border-color: $first-color;
+        }
+      }
+      .x-circle {
+        .cc-round {
+          background-color: $second-color;
+          border-color: $second-color;
         }
       }
     }
