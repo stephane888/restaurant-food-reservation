@@ -165,8 +165,7 @@ export default {
      */
     resetApp() {
       this.$store.dispatch("resetApp");
-      this.$refs.getMinDate();
-      this.$refs.loadCalendarConfig();
+      this.$refs.calendardisplay.loadCalendarConfig();
     },
   },
 };

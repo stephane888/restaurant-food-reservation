@@ -98,7 +98,7 @@ export default new Vuex.Store({
       state.report = value;
     },
     DISABLE_BANNER(state) {
-      for (let i = 0; i < state.state.steps.length; i++) {
+      for (let i = 1; i < state.state.steps.length; i++) {
         state.steps[i].value = "";
         state.steps[i].step_valid = false;
       }
