@@ -1,42 +1,42 @@
 <template>
-  <div v-if="currentStep < 4" class="multi-step-form">
-    <form v-if="!show_login_form" class="form" @submit="submitStep">
-      <slot name="header"></slot>
+  <div>
+    <div v-if="currentStep < 4" class="multi-step-form">
+      <form v-if="!show_login_form" class="form" @submit="submitStep">
+        <slot name="header"></slot>
 
-      <!-- <transition-group name="slide-fade" mode="eout-in"> -->
-      <div v-show="currentStep == 0" key="first" class="animate">
-        <vue-calendar
-          ref="calendardisplay"
-          @ev_data="ev_date_value"
-        ></vue-calendar>
-      </div>
-      <div v-show="currentStep == 1" key="second" class="animate">
-        <time-display
-          ref="timedisplay"
-          @ev_hours="ev_hours_value"
-        ></time-display>
-      </div>
-      <div v-show="currentStep == 2" key="third" class="animate">
-        <nombre-place ref="placesdisplay"></nombre-place>
-      </div>
-      <div v-show="currentStep == 3" key="four" class="animate">
-        <display-info @setReservation="setReservation"></display-info>
-      </div>
-      <!-- </transition-group> -->
-    </form>
-    <!-- step reservation -->
-    <loginRegister
-      v-if="show_login_form"
-      actionAfterRegister="emit_even_register"
-      action-after-login="emit_even"
-      :showModalSuccess="false"
-      ref="LoginRegister"
-    ></loginRegister>
-    <!-- steps :
+        <!-- <transition-group name="slide-fade" mode="eout-in"> -->
+        <div v-show="currentStep == 0" key="first" class="animate">
+          <vue-calendar @ev_data="ev_date_value"></vue-calendar>
+        </div>
+        <div v-show="currentStep == 1" key="second" class="animate">
+          <time-display
+            ref="timedisplay"
+            @ev_hours="ev_hours_value"
+          ></time-display>
+        </div>
+        <div v-show="currentStep == 2" key="third" class="animate">
+          <nombre-place ref="placesdisplay"></nombre-place>
+        </div>
+        <div v-show="currentStep == 3" key="four" class="animate">
+          <display-info @setReservation="setReservation"></display-info>
+        </div>
+        <!-- </transition-group> -->
+      </form>
+      <!-- step reservation -->
+      <loginRegister
+        v-if="show_login_form"
+        actionAfterRegister="emit_even_register"
+        action-after-login="emit_even"
+        :showModalSuccess="false"
+        ref="LoginRegister"
+      ></loginRegister>
+      <!-- steps :
       <pre>{{ steps }}</pre> -->
-  </div>
-  <div v-else key="five" class="animate">
-    <show-report @resetApp="resetApp"></show-report>
+    </div>
+    <div v-else key="five" class="animate">
+      sdsds
+      <show-report @resetApp="resetApp"></show-report>
+    </div>
   </div>
 </template>
 
@@ -161,11 +161,11 @@ export default {
       });
     },
     /**
-     * Permet de reinitialiser l'application
+     * Permet de re-initialiser l'application.
      */
     resetApp() {
+      // loadCalendarConfig() doit etre dans le store.
       this.$store.dispatch("resetApp");
-      this.$refs.calendardisplay.loadCalendarConfig();
     },
   },
 };

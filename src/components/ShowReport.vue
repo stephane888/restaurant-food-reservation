@@ -58,15 +58,11 @@
 import { mapState } from "vuex";
 export default {
   name: "BlocReservation",
-  components: {},
-  props: {},
-  data() {},
-  mount() {},
   computed: {
     ...mapState(["report"]),
     getReportStatut() {
-      console.log("this report:" + this.report);
-      console.log("condition :" + (this.report == 1));
+      // console.log("this report:" + this.report);
+      // console.log("condition :" + (this.report == 1));
       return this.report;
     },
   },

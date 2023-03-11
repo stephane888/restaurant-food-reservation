@@ -63,7 +63,14 @@ export default new Vuex.Store({
     urlLoad: "/booking-system/dates",
     finalUrl: "/booking-system/set-reservation",
     defaultConfig: null,
+    /**
+     * Indique le status de l'action.
+     */
     report: 0,
+    /**
+     * Status chargement de la configuration.
+     */
+    configIsLoading: false,
   },
   getters: {},
   mutations: {
@@ -97,12 +104,12 @@ export default new Vuex.Store({
     SET_REPORT_VALUE(state, value) {
       state.report = value;
     },
-    DISABLE_BANNER(state) {
-      for (let i = 1; i < state.state.steps.length; i++) {
-        state.steps[i].value = "";
-        state.steps[i].step_valid = false;
-      }
-    },
+    // DISABLE_BANNER(state) {
+    //   for (let i = 1; i < state.state.steps.length; i++) {
+    //     state.steps[i].value = "";
+    //     state.steps[i].step_valid = false;
+    //   }
+    // },
   },
   actions: {
     setCurrentStep({ commit }, stepIndex) {
@@ -149,13 +156,26 @@ export default new Vuex.Store({
         .post(state.finalUrl, reservation)
         .then((response) => {
           console.log("reservation response", response.data);
-          if (response.data) commit("SET_REPORT_VALUE", response.data);
+          commit("SET_REPORT_VALUE", 1);
           commit("SET_STEP_VALUE", "success");
         })
         .catch((er) => {
           console.log("hours error", er);
           commit("SET_REPORT_VALUE", 0);
-          commit("SET_STEP_VALUE", "error");
+          commit("SET_STEP_VALUE", 0);
+        });
+    },
+    loadCalendarConfig() {
+      this.configIsLoading = true;
+      rootConfig
+        .get(this.urlLoad)
+        .then((rep) => {
+          console.log("config response", rep.data);
+          if (rep.data) this.initCalendar(rep.data);
+          this.configIsLoading = false;
+        })
+        .catch((er) => {
+          console.log("Calendar config error", er);
         });
     },
   },
