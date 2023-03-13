@@ -39,7 +39,6 @@
 
 <script>
 import moment from "../js/moment";
-import rootConfig from "../rootConfig";
 import { mapState } from "vuex";
 export default {
   name: "BlocReservation",
@@ -48,8 +47,6 @@ export default {
   data() {
     return {
       /* calendar config */
-      //  calendarConfig: {},
-      // urlLoad: "/booking-system/dates",
       configIsLoading: false,
       mounthLabel: [
         "Janvier",
@@ -134,23 +131,13 @@ export default {
       this.$emit("ev_data", date);
     },
     loadCalendarConfig() {
-      this.configIsLoading = true;
-      rootConfig
-        .get(this.urlLoad)
-        .then((rep) => {
-          console.log("config response", rep.data);
-          if (rep.data) this.initCalendar(rep.data);
-          this.configIsLoading = false;
-        })
-        .catch((er) => {
-          console.log("Calendar config error", er);
-        });
-    },
-    initCalendar(datas) {
-      this.$store.dispatch("setDefaultConfig", datas);
-      //this.calendarConfig = datas;
+      this.$store.dispatch("loadCalendarConfig");
       this.getMinDate();
     },
+    /* initCalendar(datas) {
+      this.$store.dispatch("setDefaultConfig", datas);
+      this.calendarConfig = datas;
+    }, */
   },
 };
 </script>

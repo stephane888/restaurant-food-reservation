@@ -1,6 +1,6 @@
 <template>
   <div class="multi-step-tabs mb-4">
-    <div class="step-tabs-container">
+    <div v-if="currentStep < 4" class="step-tabs-container">
       <div class="step-banner">
         <div
           class="sb-button"
@@ -11,7 +11,7 @@
               index == 0 ||
               step.step_no - 1 == currentStep ||
               currentStep > index,
-            'sb-button--disabled': stepDisabled(index),
+            'sb-button--disabled': !step.step_valid,
             'sb-button--valid': step.step_valid,
           }"
           @click="setCurrentStep(index)"
@@ -69,7 +69,7 @@ export default {
     isValid() {},
     stepDisabled(i) {
       if (i > 0) {
-        if (!this.steps[i - 1].step_valid) return true;
+        if (!this.steps[i].step_valid) return true;
       } else {
         return false;
       }

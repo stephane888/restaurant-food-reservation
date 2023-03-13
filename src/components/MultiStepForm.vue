@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="currentStep < 4" class="multi-step-form">
+    <div class="multi-step-form">
       <form v-if="!show_login_form" class="form" @submit="submitStep">
         <slot name="header"></slot>
 
@@ -20,6 +20,9 @@
         <div v-show="currentStep == 3" key="four" class="animate">
           <display-info @setReservation="setReservation"></display-info>
         </div>
+        <div v-show="currentStep == 4" key="five" class="animate">
+          <show-report @resetApp="resetApp"></show-report>
+        </div>
         <!-- </transition-group> -->
       </form>
       <!-- step reservation -->
@@ -32,10 +35,6 @@
       ></loginRegister>
       <!-- steps :
       <pre>{{ steps }}</pre> -->
-    </div>
-    <div v-else key="five" class="animate">
-      sdsds ++
-      <show-report @resetApp="resetApp"></show-report>
     </div>
   </div>
 </template>
@@ -164,7 +163,6 @@ export default {
      * Permet de re-initialiser l'application.
      */
     resetApp() {
-      // loadCalendarConfig() doit etre dans le store.
       this.$store.dispatch("resetApp");
     },
   },

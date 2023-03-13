@@ -74,12 +74,18 @@ export default new Vuex.Store({
   },
   getters: {},
   mutations: {
+    SWITCH_LOADING_STATE(state, value) {
+      state.configIsLoading = value;
+    },
     SET_HOUR_SUPL_DATAS(state, payload) {
       state.steps[1].period_name = payload.period_name;
       state.steps[1].discount = payload.discount;
     },
     SET_CURRENT_STEP(state, stepIndex) {
       state.currentStep = stepIndex;
+      for (let i = 0; i < state.steps.length; i++) {
+        console.log("is_valid[" + i + "]" + state.steps[i].step_valid);
+      }
     },
     SET_STEP_VALUE(state, value) {
       state.steps[state.currentStep].value = value;
@@ -90,6 +96,7 @@ export default new Vuex.Store({
           state.steps[i].step_valid = false;
         }
         state.currentStep++;
+        state.steps[state.currentStep].step_valid = true;
       }
     },
     SET_DEFAULT_CONFIG(state, value) {
@@ -104,12 +111,18 @@ export default new Vuex.Store({
     SET_REPORT_VALUE(state, value) {
       state.report = value;
     },
-    // DISABLE_BANNER(state) {
-    //   for (let i = 1; i < state.state.steps.length; i++) {
-    //     state.steps[i].value = "";
-    //     state.steps[i].step_valid = false;
-    //   }
-    // },
+    DISABLED_BANNER(state) {
+      //Desactivation de toutes les étapes
+      for (let i = 0; i < state.steps.length; i++) {
+        state.steps[i].value = "";
+        state.steps[i].step_valid = false;
+      }
+    },
+    RESET_APP(state) {
+      //activation de la première saut sur celle-ci
+      state.steps[0].step_valid = true;
+      state.currentStep = 0;
+    },
   },
   actions: {
     setCurrentStep({ commit }, stepIndex) {
@@ -124,20 +137,22 @@ export default new Vuex.Store({
     setHourSuplDatas({ commit }, payload) {
       commit("SET_HOUR_SUPL_DATAS", payload);
     },
-    setReportValue({ commit }, report) {
-      commit("SET_REPORT_VALUE", report);
+    setReportValue({ commit }, payload) {
+      commit("SET_REPORT_VALUE", payload.report);
+      commit("SET_STEP_VALUE", payload.message);
+      commit("DISABLED_BANNER");
     },
     resetApp({ commit }) {
-      commit("SET_CURRENT_STEP", 0);
-      commit("SET_STEP_VALUE", "");
-      commit("SET_CURRENT_STEP", 0);
+      commit("SWITCH_LOADING_STATE", true);
+      commit("RESET_APP");
+      this.dispatch("loadCalendarConfig");
     },
     /**
      * Effectue la sauveharde de la reservation.
      *
      * @param {*} param
      */
-    setReservation({ state, commit }) {
+    setReservation({ state }) {
       // console.log(this.steps);
       let day = moment(state.steps[0].value).unix();
       let hour = state.steps[1].value;
@@ -156,23 +171,28 @@ export default new Vuex.Store({
         .post(state.finalUrl, reservation)
         .then((response) => {
           console.log("reservation response", response.data);
-          commit("SET_REPORT_VALUE", 1);
-          commit("SET_STEP_VALUE", "success");
+          this.dispatch("setReportValue", {
+            report: 1,
+            message: "success",
+          });
         })
         .catch((er) => {
           console.log("hours error", er);
-          commit("SET_REPORT_VALUE", 0);
-          commit("SET_STEP_VALUE", 0);
+          this.dispatch("setReportValue", {
+            report: 0,
+            message: "error",
+          });
         });
     },
-    loadCalendarConfig() {
-      this.configIsLoading = true;
+    loadCalendarConfig({ commit, state }) {
+      commit("SWITCH_LOADING_STATE", true);
+      console.log(state.urlLoad);
       rootConfig
-        .get(this.urlLoad)
+        .get(state.urlLoad)
         .then((rep) => {
           console.log("config response", rep.data);
-          if (rep.data) this.initCalendar(rep.data);
-          this.configIsLoading = false;
+          if (rep.data) commit("SET_DEFAULT_CONFIG", rep.data);
+          commit("SWITCH_LOADING_STATE", false);
         })
         .catch((er) => {
           console.log("Calendar config error", er);
