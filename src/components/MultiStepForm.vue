@@ -237,6 +237,16 @@ a {
     justify-content: flex-start;
     flex-wrap: wrap;
     gap: 10px;
+    .active-btn {
+      transition: background-color 0.5s, color 0.5s;
+      &:hover {
+        background-color: $first-color;
+        color: white;
+      }
+    }
+    .desabled-btn {
+      background-color: rgba(205, 205, 205, 0.3);
+    }
   }
   .time-btn {
     min-width: 80px;

@@ -13,6 +13,10 @@
           <div class="time-list">
             <button
               class="time-btn"
+              :class="{
+                'active-btn': heure.status,
+                'desabled-btn': !heure.status,
+              }"
               v-for="(heure, i) in time.times"
               :key="i"
               :disabled="!heure.status"
