@@ -34,7 +34,7 @@
       <pre>{{ steps }}</pre> -->
     </div>
     <div v-else key="five" class="animate">
-      sdsds
+      sdsds ++
       <show-report @resetApp="resetApp"></show-report>
     </div>
   </div>
