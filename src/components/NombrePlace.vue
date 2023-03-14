@@ -5,7 +5,7 @@
         <span class="ts-icon">
           <b-icon icon="person" font-scale="1.3"></b-icon>
         </span>
-        <span>Choisir le nombre de place</span>
+        <span>{{ step_title }}</span>
       </h6>
       <div class="hours-content">
         <div class="block-time">
@@ -36,6 +36,7 @@ export default {
   props: {},
   data() {
     return {
+      step_title: "Choisir le nombre de place",
       Places: [],
     };
   },

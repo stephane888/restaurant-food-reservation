@@ -5,7 +5,7 @@
         <span class="ts-icon">
           <b-icon icon="bullseye" font-scale="1.2"></b-icon>
         </span>
-        Choisir une offre
+        {{ step_title }}
       </h6>
 
       <div class="offers-content">
@@ -62,28 +62,7 @@ export default {
   data() {
     return {
       value: null,
-      offers: [
-        {
-          titre: "Date de reservation",
-          value: "",
-          description:
-            "Boissons non comprises, disponible sur la plage horaire réservée.",
-        },
-        {
-          titre: "20% du repas",
-          reduction: "-20%",
-          value: "offer-2",
-          description:
-            "Boissons non comprises, disponible sur la plage horaire réservée.",
-        },
-        {
-          titre: "Faire une réservation sans offre spéciale",
-          reduction: "",
-          value: "offer-3",
-          description:
-            "Boissons non comprises, disponible sur la plage horaire réservée.",
-        },
-      ],
+      step_title: "Bilan de la commande",
     };
   },
   computed: {
@@ -102,11 +81,6 @@ export default {
       console.log("croix ou check" + this.show_login_form);
       true;
     },
-    // setValue(offer) {
-    //   this.value = offer.value;
-    //   console.log("ae", offer.value);
-    //   // this.$store.dispatch("setStepValue", this.value);
-    // },
     setReservation() {
       this.$emit("setReservation");
     },

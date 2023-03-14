@@ -3,8 +3,8 @@
     <div
       class="report-box"
       :class="{
-        'report-box-success': getReportStatut == 1,
-        'report-box-error': getReportStatut != 1,
+        'report-box-success': this.report == 1,
+        'report-box-error': this.report != 1,
       }"
     >
       <div class="dot"></div>
@@ -12,8 +12,8 @@
       <div
         class="face"
         :class="{
-          'face-happy': getReportStatut == 1,
-          'face-sad': getReportStatut != 1,
+          'face-happy': this.report == 1,
+          'face-sad': this.report != 1,
         }"
       >
         <div class="eye"></div>
@@ -21,25 +21,25 @@
         <div
           class="mouth"
           :class="{
-            happy: getReportStatut == 1,
-            sad: getReportStatut != 1,
+            happy: this.report == 1,
+            sad: this.report != 1,
           }"
         ></div>
       </div>
       <div
         class="shadow"
         :class="{
-          scale: getReportStatut == 1,
-          move: getReportStatut != 1,
+          scale: this.report == 1,
+          move: this.report != 1,
         }"
       ></div>
-      <div v-if="getReportStatut == 1" class="message">
-        <div class="report-title alert">Success!</div>
-        <div class="report-description">yay, everything is working.</div>
-      </div>
-      <div v-else class="message">
-        <div class="report-title alert">Error!</div>
-        <div class="report-description">oh no, something went wrong.</div>
+      <div class="message">
+        <div class="report-title alert">
+          {{ this.message }}
+        </div>
+        <div class="report-description">
+          {{ this.description }}
+        </div>
       </div>
 
       <button @click="resetApp()" class="button-box">
@@ -58,13 +58,17 @@
 import { mapState } from "vuex";
 export default {
   name: "BlocReservation",
+  data() {
+    return {
+      message: this.report == 1 ? "Success!" : "Error!",
+      description:
+        this.report == 1
+          ? "yay, everything is working."
+          : "oh no, something went wrong.",
+    };
+  },
   computed: {
     ...mapState(["report"]),
-    getReportStatut() {
-      // console.log("this report:" + this.report);
-      // console.log("condition :" + (this.report == 1));
-      return this.report;
-    },
   },
   methods: {
     resetApp() {
