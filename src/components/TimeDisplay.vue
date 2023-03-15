@@ -5,7 +5,7 @@
         <span class="ts-icon">
           <b-icon icon="clock" font-scale="1.2"></b-icon>
         </span>
-        {{ step_title }}
+        {{ this.steps[1].step_title }}
       </h6>
       <div class="hours-content">
         <div class="block-time" v-for="(time, index) in allTime" :key="index">
@@ -109,7 +109,6 @@ export default {
   props: {},
   data() {
     return {
-      step_title: "Choisir une heure",
       hoursIsLoading: false,
       allTime: [],
       date: "",
@@ -117,7 +116,7 @@ export default {
   },
   mounted() {},
   computed: {
-    ...mapState(["urlLoad"]),
+    ...mapState(["urlLoad", "steps"]),
   },
   methods: {
     loadAvailableHours(date) {

@@ -5,7 +5,7 @@
         <span class="ts-icon">
           <b-icon icon="bullseye" font-scale="1.2"></b-icon>
         </span>
-        {{ step_title }}
+        {{ this.steps[3].step_title }}
       </h6>
 
       <div class="offers-content">
@@ -48,7 +48,9 @@
         </div>
       </div>
       <div class="book-bloc">
-        <button class="book-btn" @click="setReservation()">Book now</button>
+        <button class="book-btn" @click="setReservation()">
+          {{ call_to_action }}
+        </button>
       </div>
     </div>
   </div>
@@ -61,6 +63,7 @@ export default {
   props: {},
   data() {
     return {
+      call_to_action: "Book Now",
       value: null,
       step_title: "Bilan de la commande",
     };

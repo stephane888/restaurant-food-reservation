@@ -5,7 +5,7 @@
         <span class="ts-icon">
           <b-icon icon="person" font-scale="1.3"></b-icon>
         </span>
-        <span>{{ step_title }}</span>
+        <span>{{ this.steps[2].step_title }}</span>
       </h6>
       <div class="hours-content">
         <div class="block-time">
@@ -42,7 +42,7 @@ export default {
   },
   mounted() {},
   computed: {
-    ...mapState(["defaultConfig", "urlLoad"]),
+    ...mapState(["defaultConfig", "urlLoad", "steps"]),
     nombrePlaces() {
       return this.Places;
     },

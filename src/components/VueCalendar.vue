@@ -6,12 +6,12 @@
         <span class="ts-icon">
           <b-icon icon="calendar2-date" font-scale="1.2"></b-icon>
         </span>
-        <span>Choisir une date de réservation :</span>
+        <span>{{ this.steps[0].step_title }}:</span>
       </h6>
       <b-calendar
         class="mt-3"
         v-model="value"
-        locale="fr"
+        :locale="this.lang"
         block
         nav-button-variant="success"
         selected-variant="success"
@@ -48,33 +48,9 @@ export default {
     return {
       /* calendar config */
       configIsLoading: false,
-      mounthLabel: [
-        "Janvier",
-        "Fevrier",
-        "Mars",
-        "Avril",
-        "Mai",
-        "Juin",
-        "Juillet",
-        "Août",
-        "Septembre",
-        "Octobrer",
-        "Novembre",
-        "Décembre",
-      ],
-      dayLables: ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"],
       context: null,
       value: "",
-      labels: {
-        labelPrevYear: "Année précédente",
-        labelPrevMonth: "Mois précédent",
-        labelCurrentMonth: "Mois actuel",
-        labelNextMonth: "Mois suivant",
-        labelNextYear: "Année suivante",
-        labelNoDateSelected: "Aucune date selectionné",
-        labelHelp:
-          "Utilisez les touches du curseur pour naviguer dans les dates du calendrier",
-      },
+      labels: this.setLabels,
       minDate: "",
       maxDate: "",
     };
@@ -84,9 +60,27 @@ export default {
     this.loadCalendarConfig();
   },
   computed: {
-    ...mapState(["urlLoad", "defaultConfig"]),
+    ...mapState([
+      "urlLoad",
+      "defaultConfig",
+      "calendar_config",
+      "lang",
+      "steps",
+    ]),
   },
   methods: {
+    setLabels() {
+      return {
+        labelPrevYear: this.calendar_config.labels_config.label_prev_year,
+        labelPrevMonth: this.calendar_config.labels_config.label_prev_month,
+        labelCurrentMonth: this.calendar_config.labels_current_month,
+        labelNextMonth: this.calendar_config.labels_config.label_next_month,
+        labelNextYear: this.calendar_config.labels_config.label_next_year,
+        labelNoDateSelected:
+          this.calendar_config.labels_config.label_no_date_selected,
+        labelHelp: this.calendar_config.labels_config.label_help,
+      };
+    },
     getMinDate() {
       const now = moment().toDate();
       // Date minimum
@@ -121,6 +115,9 @@ export default {
       }
       return 0;
       //return weekday === 0 || weekday === 6 || day === 13;
+    },
+    getLang() {
+      return this.lang;
     },
     onContext(ctx) {
       this.context = ctx;

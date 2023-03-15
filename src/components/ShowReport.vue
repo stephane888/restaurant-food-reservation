@@ -43,9 +43,7 @@
       </div>
 
       <button @click="resetApp()" class="button-box">
-        <div v-if="getReportStatut == 1" class="report-title green">
-          continue
-        </div>
+        <div v-if="this.report == 1" class="report-title green">continue</div>
         <div v-else class="report-title red">try again</div>
       </button>
     </div>

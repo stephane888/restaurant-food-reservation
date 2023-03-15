@@ -17,6 +17,7 @@ export default new Vuex.Store({
     show_login_form: false,
     steps: [
       {
+        step_title: "Choose a booking date",
         step_no: 1,
         step_valid: false,
         step_skip: false,
@@ -25,6 +26,7 @@ export default new Vuex.Store({
         value: "",
       },
       {
+        step_title: "Choose a time",
         step_no: 2,
         step_valid: false,
         step_skip: true,
@@ -35,6 +37,7 @@ export default new Vuex.Store({
         discount: "",
       },
       {
+        step_title: "Choose the number of places",
         step_no: 3,
         step_valid: false,
         step_skip: false,
@@ -43,6 +46,7 @@ export default new Vuex.Store({
         value: "",
       },
       {
+        step_title: "Reservation report",
         step_no: 4,
         step_valid: false,
         step_skip: false,
@@ -51,6 +55,7 @@ export default new Vuex.Store({
         value: "",
       },
       {
+        step_title: "",
         step_no: 5,
         step_valid: false,
         step_skip: false,
@@ -67,6 +72,8 @@ export default new Vuex.Store({
      * Indique le status de l'action.
      */
     report: 0,
+    lang: "en",
+    calendar_config: {},
     /**
      * Status chargement de la configuration.
      */
@@ -74,6 +81,18 @@ export default new Vuex.Store({
   },
   getters: {},
   mutations: {
+    SET_STEP_ONE_CONFIG(state, config) {
+      state.calendar_config = config;
+    },
+    SET_STEPS_NAME(state, payload) {
+      payload = Object.values(payload);
+      for (let i = 0; i < state.steps.length; i++) {
+        state.steps[i].step_name =
+          typeof payload[i] !== "undefined"
+            ? payload[i].name
+            : state.steps[i].step_name;
+      }
+    },
     SWITCH_LOADING_STATE(state, value) {
       state.configIsLoading = value;
     },
@@ -83,9 +102,6 @@ export default new Vuex.Store({
     },
     SET_CURRENT_STEP(state, stepIndex) {
       state.currentStep = stepIndex;
-      for (let i = 0; i < state.steps.length; i++) {
-        console.log("is_valid[" + i + "]" + state.steps[i].step_valid);
-      }
     },
     SET_STEP_VALUE(state, value) {
       state.steps[state.currentStep].value = value;
@@ -184,6 +200,11 @@ export default new Vuex.Store({
           });
         });
     },
+
+    /**
+     * get app configurations
+     * @param {*} param0
+     */
     loadCalendarConfig({ commit, state }) {
       commit("SWITCH_LOADING_STATE", true);
       console.log(state.urlLoad);
@@ -192,6 +213,8 @@ export default new Vuex.Store({
         .then((rep) => {
           console.log("config response", rep.data);
           if (rep.data) commit("SET_DEFAULT_CONFIG", rep.data);
+          commit("SET_STEPS_NAME", rep.data.configs.steps_labels);
+          commit("SET_STEP_ONE_CONFIG", rep.data.configs.step1);
           commit("SWITCH_LOADING_STATE", false);
         })
         .catch((er) => {
