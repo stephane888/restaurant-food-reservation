@@ -35,16 +35,17 @@
       ></div>
       <div class="message">
         <div class="report-title alert">
-          {{ this.message }}
+          {{ getMessage }}
         </div>
         <div class="report-description">
-          {{ this.description }}
+          {{ getDescription }}
         </div>
       </div>
 
       <button @click="resetApp()" class="button-box">
-        <div v-if="this.report == 1" class="report-title green">continue</div>
-        <div v-else class="report-title red">try again</div>
+        <div class="report-title green">
+          {{ this.report_labels.reset_btn_label }}
+        </div>
       </button>
     </div>
   </div>
@@ -56,17 +57,19 @@
 import { mapState } from "vuex";
 export default {
   name: "BlocReservation",
-  data() {
-    return {
-      message: this.report == 1 ? "Success!" : "Error!",
-      description:
-        this.report == 1
-          ? "yay, everything is working."
-          : "oh no, something went wrong.",
-    };
-  },
   computed: {
-    ...mapState(["report"]),
+    ...mapState(["report", "report_labels"]),
+    getMessage() {
+      console.log("report message: " + this.report_labels.success.message);
+      return this.report == 1
+        ? this.report_labels.success.message
+        : this.report_labels.error.message;
+    },
+    getDescription() {
+      return this.report == 1
+        ? this.report_labels.success.resume
+        : this.report_labels.error.resume;
+    },
   },
   methods: {
     resetApp() {

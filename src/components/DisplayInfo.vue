@@ -31,7 +31,7 @@
         <div class="option-selection os-selected">
           <div class="first-line">
             <div class="cc-titre">
-              <span>Utilisateur connecté(e)</span>
+              <span>{{ isOnline }}</span>
             </div>
             <div
               :class="{
@@ -49,7 +49,7 @@
       </div>
       <div class="book-bloc">
         <button class="book-btn" @click="setReservation()">
-          {{ call_to_action }}
+          {{ this.report_labels.call_to_action }}
         </button>
       </div>
     </div>
@@ -69,14 +69,18 @@ export default {
     };
   },
   computed: {
-    ...mapState(["steps", "show_login_form", "user"]),
+    ...mapState(["steps", "show_login_form", "user", "report_labels"]),
     isConnected() {
-      console.log("this user:" + this.user);
       if (this.user) {
         return true;
       } else {
         return false;
       }
+    },
+    isOnline() {
+      return this.user
+        ? this.report_labels.user_state.online
+        : this.report_labels.user_state.offline;
     },
   },
   methods: {

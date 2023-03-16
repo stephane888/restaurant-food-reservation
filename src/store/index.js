@@ -55,7 +55,7 @@ export default new Vuex.Store({
         value: "",
       },
       {
-        step_title: "",
+        step_title: " report",
         step_no: 5,
         step_valid: false,
         step_skip: false,
@@ -72,6 +72,7 @@ export default new Vuex.Store({
      * Indique le status de l'action.
      */
     report: 0,
+    report_labels: "",
     lang: "en",
     calendar_config: {},
     /**
@@ -81,6 +82,9 @@ export default new Vuex.Store({
   },
   getters: {},
   mutations: {
+    SET_REPORT_LABELS_CONFIG(state, payload) {
+      state.report_labels = payload;
+    },
     SET_STEP_ONE_CONFIG(state, config) {
       state.calendar_config = config;
     },
@@ -215,6 +219,7 @@ export default new Vuex.Store({
           if (rep.data) commit("SET_DEFAULT_CONFIG", rep.data);
           commit("SET_STEPS_NAME", rep.data.configs.steps_labels);
           commit("SET_STEP_ONE_CONFIG", rep.data.configs.step1);
+          commit("SET_REPORT_LABELS_CONFIG", rep.data.configs.report);
           commit("SWITCH_LOADING_STATE", false);
         })
         .catch((er) => {
