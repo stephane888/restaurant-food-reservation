@@ -80,7 +80,6 @@ export default {
     },
     formatDate(value) {
       const date = moment(value).format("DD MMM  YYYY");
-      console.log("a", date);
       return date;
     },
     showLabel(step) {

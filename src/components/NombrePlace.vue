@@ -46,20 +46,6 @@ export default {
     nombrePlaces() {
       return this.Places;
     },
-    // nombrePlaces() {
-    //   if (this.defaultConfig && this.defaultConfig.maxPeoples) {
-    //     let nbPlace = [];
-    //     let begin = 1;
-    //     while (nbPlace.length < this.defaultConfig.maxPeoples) {
-    //       nbPlace.push(begin);
-    //       console.log("ae");
-    //       begin++;
-    //     }
-    //     return nbPlace;
-    //   } else {
-    //     return this.Places;
-    //   }
-    // },
   },
   methods: {
     setPlaces(nbrePlaces) {
@@ -67,17 +53,14 @@ export default {
       for (let i = 1; i <= nbrePlaces; i++) {
         this.Places.push(i);
       }
-      console.log("Nbre places : " + this.Places);
     },
     loadAvailablePlaces(date, hour_string) {
       let date_string = moment(date).unix();
       rootConfig
         .get(this.urlLoad + "/" + date_string + "/" + hour_string)
         .then((reponse) => {
-          console.log("hours response", reponse);
           if (reponse.data) {
             this.setPlaces(reponse.data.number);
-            console.log(reponse.data.number);
           }
           this.hoursIsLoading = false;
         })

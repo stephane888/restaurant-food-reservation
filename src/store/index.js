@@ -173,7 +173,6 @@ export default new Vuex.Store({
      * @param {*} param
      */
     setReservation({ state }) {
-      // console.log(this.steps);
       let day = moment(state.steps[0].value).unix();
       let hour = state.steps[1].value;
       let period = state.steps[1].period_name;
@@ -186,11 +185,9 @@ export default new Vuex.Store({
         periode_name: period,
         reservation_reduction: reduction,
       };
-      console.log(reservation);
       rootConfig
         .post(state.finalUrl, reservation)
-        .then((response) => {
-          console.log("reservation response", response.data);
+        .then(() => {
           this.dispatch("setReportValue", {
             report: 1,
             message: "success",
@@ -211,11 +208,9 @@ export default new Vuex.Store({
      */
     loadCalendarConfig({ commit, state }) {
       commit("SWITCH_LOADING_STATE", true);
-      console.log(state.urlLoad);
       rootConfig
         .get(state.urlLoad)
         .then((rep) => {
-          console.log("config response", rep.data);
           if (rep.data) commit("SET_DEFAULT_CONFIG", rep.data);
           commit("SET_STEPS_NAME", rep.data.configs.steps_labels);
           commit("SET_STEP_ONE_CONFIG", rep.data.configs.step1);

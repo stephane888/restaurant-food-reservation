@@ -84,10 +84,6 @@ export default {
     },
   },
   methods: {
-    isActive() {
-      console.log("croix ou check" + this.show_login_form);
-      true;
-    },
     setReservation() {
       this.$emit("setReservation");
     },

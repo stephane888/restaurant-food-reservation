@@ -101,8 +101,6 @@ export default {
       // Disable weekends (Sunday = `0`, Saturday = `6`) and
       // disable days that fall on the 13th of the month
       const weekday = date.getDay();
-      //const day = date.getDate();
-      //console.log("ymd", ymd);
       // Return `true` if the date should be disabled
       if (this.defaultConfig && this.defaultConfig.disabledDays) {
         let dayInclude = this.defaultConfig.disabledDays.includes(weekday);
@@ -123,7 +121,6 @@ export default {
       this.context = ctx;
     },
     setStepValue(ymd, date) {
-      console.log("value", ymd, "--", date);
       this.$store.dispatch("setStepValue", ymd);
       this.$emit("ev_data", date);
     },

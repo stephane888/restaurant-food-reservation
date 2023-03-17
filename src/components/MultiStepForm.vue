@@ -72,10 +72,6 @@ export default {
     canNext() {
       return this.steps.length && this.steps[this.activeStepIndex].step_valid;
     },
-    showStepsPanel() {
-      console.log(!this.show_login_form && this.currentStep <= 3);
-      return !this.show_login_form && this.currentStep <= 3;
-    },
   },
   mounted() {
     this.check_if_user_connected();
@@ -84,7 +80,6 @@ export default {
   },
   methods: {
     ev_date_value(date) {
-      console.log("voici dates", date, "", this.$refs.timedisplay);
       this.$refs.timedisplay.loadAvailableHours(date);
     },
     ev_hours_value(date, hour) {
@@ -119,8 +114,7 @@ export default {
       document.addEventListener(
         "login_rx_vuejs__user_is_login",
         () => {
-          this.getCurrentUser().then((user) => {
-            console.log("user : ", user);
+          this.getCurrentUser().then(() => {
             // Ajouter votre logique ici.
             this.$store.dispatch("setReservation");
           });

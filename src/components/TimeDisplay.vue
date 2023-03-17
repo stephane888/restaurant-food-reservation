@@ -123,12 +123,10 @@ export default {
       this.date = date;
       this.hoursIsLoading = true;
       let date_string = moment(date).unix();
-      console.log("date", date_string);
 
       rootConfig
         .get(this.urlLoad + "/" + date_string)
         .then((reponse) => {
-          console.log("hours response", reponse);
           if (reponse.data) this.setAllTime(reponse.data);
           this.hoursIsLoading = false;
         })
@@ -142,7 +140,6 @@ export default {
     setTime(value, discount, period_name) {
       this.$emit("ev_hours", this.date, value);
       this.$store.dispatch("setStepValue", value);
-      console.log("hello world-" + discount + "-there");
       const payload = {
         period_name: period_name,
         discount: discount,
