@@ -19,7 +19,6 @@ export default {
 body {
   background-color: rgb(255, 255, 255);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  height: 100%;
   box-sizing: border-box;
 }
 #app {
@@ -31,7 +30,7 @@ body {
   margin-top: 60px;
   display: flex;
   //justify-content: center;
-  min-height: 100vh;
+  // min-height: 100vh;
   width: 100%;
   flex-direction: column;
 }

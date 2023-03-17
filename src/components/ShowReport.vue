@@ -60,7 +60,7 @@ export default {
   computed: {
     ...mapState(["report", "report_labels"]),
     getMessage() {
-      console.log("report message: " + this.report_labels.success.message);
+      console.log(this.report_labels);
       return this.report == 1
         ? this.report_labels.success.message
         : this.report_labels.error.message;
