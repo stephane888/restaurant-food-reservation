@@ -167,19 +167,19 @@ export default {
 $first-color: rgb(88 148 66);
 $gray-color: #f8f9fa;
 a {
-  color: #42b983;
+  color: $first-color;
 }
 .ts-icon {
   font-size: 16px;
   margin-right: 8px;
 }
 .title-steps {
-  color: black;
-  font-size: 14px;
-  text-align: left;
-  margin-bottom: 25px;
-  font-weight: bold;
-  letter-spacing: 1px;
+  // color: black;
+  // font-size: 14px;
+  // text-align: left;
+  // margin-bottom: 25px;
+  // font-weight: bold;
+  // letter-spacing: 1px;
   display: flex;
   align-items: center;
 }
@@ -202,9 +202,9 @@ a {
   transition: 0.3s;
   cursor: pointer;
   &:hover {
-    background: #42b983;
+    background: $first-color;
     color: white;
-    border-color: #42b983;
+    border-color: $first-color;
   }
   &__prev {
     border-color: #6f6f6f;
@@ -216,15 +216,15 @@ a {
 }
 .hours-content {
   text-align: left;
-  .block-time {
+  /* .block-time {
     margin-bottom: 30px;
-  }
+  } */
   .time-title {
-    font-size: 13px;
+    // font-size: 13px;
     color: black;
     text-transform: uppercase;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-top: 20px;
   }
   .time-list {
     display: flex;
@@ -251,12 +251,12 @@ a {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
+    // font-size: 12px;
     border: 1px solid rgb(91, 91, 91);
     transition: border 0.4s, background 0.3s, box-shadow 0.3s, color 0.3s;
     font-weight: bold;
     flex: 1 1 20%;
-    margin-bottom: 15px;
+    // margin-bottom: 15px;
     position: relative;
     &:hover {
       //background-color: rgba($first-color, 0.2);

@@ -108,7 +108,7 @@ $gray-color: #f8f9fa;
     width: 75%;
     min-width: 14rem;
     text-align: left;
-    line-height: 1.5;
+    // line-height: 1.5;
     border: 2px solid $gray-color;
     border-radius: 2px;
     border-radius: 0.25rem;
@@ -116,7 +116,7 @@ $gray-color: #f8f9fa;
     transition: width 250ms linear 0s, box-shadow ease 0.3s;
 
     .cc-titre {
-      font-size: 14px;
+      // font-size: 14px;
       font-weight: bold;
       margin-bottom: 10px;
       padding-right: 30px;
@@ -143,7 +143,7 @@ $gray-color: #f8f9fa;
         border-radius: 50px;
         border: 1px solid $gray-color;
         transition: ease 0.3s;
-        font-size: 24px;
+        // font-size: 24px;
         width: 25px;
         display: inline-flex;
         height: 25px;

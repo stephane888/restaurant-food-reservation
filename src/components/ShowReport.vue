@@ -123,7 +123,7 @@ $font: "Lato", sans-serif;
 
   .report-description {
     margin-top: -5px;
-    font-size: 0.5em;
+    // font-size: 0.5em;
     font-weight: 100;
     color: darken($dark, 10%);
     letter-spacing: 1px;

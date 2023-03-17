@@ -12,7 +12,7 @@
           <h5 class="time-title">{{ time.name }}</h5>
           <div class="time-list">
             <button
-              class="time-btn"
+              class="mb-4 time-btn"
               :class="{
                 'active-btn': heure.status,
                 'desabled-btn': !heure.status,
